@@ -7,7 +7,7 @@ const cors = require('cors');
 var bodyParser = require("body-parser");
 const WebSocket = require('ws')
 const server = require('http').createServer(app)
-const wss=new WebSocket.Server({port:9000})
+const wss=new WebSocket.Server({server:server})
 var mongoURL=process.env.mongo_URL
 var url= mongoURL||'mongodb://localhost:27017/'
 console.log(process.env.mongo_URL)
