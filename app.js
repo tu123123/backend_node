@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 require('dotenv').config()
-const port = 3001
+const port =process.env.PORT|| 3001
 var {MongoClient,ObjectId} = require('mongodb');
 const cors = require('cors');
 var bodyParser = require("body-parser");
