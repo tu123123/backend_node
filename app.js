@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+require('dotenv').config()
 const port = 3001
 var {MongoClient,ObjectId} = require('mongodb');
 const cors = require('cors');
@@ -7,11 +8,12 @@ var bodyParser = require("body-parser");
 const WebSocket = require('ws')
 const server = require('http').createServer(app)
 const wss=new WebSocket.Server({port:9000})
-var url= 'mongodb://localhost:27017/'
 var mongoURL=process.env.mongo_URL
+var url= mongoURL||'mongodb://localhost:27017/'
+console.log(process.env.mongo_URL)
 var Mongoclient=new MongoClient(url);
 app.use(cors())
-require('dotenv').config()
+
 let URLAPI=process.env.URL_API
 wss.on('connection', (ws)=>{
    
@@ -48,7 +50,7 @@ wss.on('connection', (ws)=>{
 
       if(b)
       {
-        console.log('kết nối thành công')
+        console.log('kết nối thành công'+url)
        await funtion(b.db('roomplan'))
        
       }
