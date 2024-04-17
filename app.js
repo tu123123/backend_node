@@ -13,7 +13,7 @@ var url= mongoURL||'mongodb://localhost:27017/'
 console.log(process.env.mongo_URL)
 var Mongoclient=new MongoClient(url);
 app.use(cors())
-
+var checksocket=false
 let URLAPI=process.env.URL_API
 
 
@@ -33,8 +33,35 @@ let URLAPI=process.env.URL_API
 server.listen(port, () => {
 
 })
+if(!checksocket){
+ app.post('/updatebooking',(req,res)=>{
+        for( let i of wss.clients){
+          if(i!==ws&& i.readyState=== WebSocket.OPEN)
+          {
+            i.send('welcome')
+          }
+        }
+      var query={
+        _id:new ObjectId(req.body._id)
+      }
+      var set={
+        $set:{
+          from:req.body.from,
+          to:req.body.to,
+          soPhong:req.body.soPhong,
+        }
+    
+      }
+      connect(async (db)=>{
+         var kq= await db.collection('booking').updateOne(query,set)
+         console.log(kq)
+      })
+      
+      res.status(200).send('ok')
+    })
+}
 wss.on('connection', (ws)=>{
-   
+   checksocket=true
     ws.send('welcome')
     app.post('/updatebooking',(req,res)=>{
         for( let i of wss.clients){
