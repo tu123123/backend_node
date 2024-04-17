@@ -7,7 +7,7 @@ const cors = require('cors');
 var bodyParser = require("body-parser");
 const WebSocket = require('ws')
 const server = require('http').createServer(app)
-const wss=new WebSocket.Server({server:server})
+const wss=new WebSocket.Server({port:9000})
 var mongoURL=process.env.mongo_URL
 var url= mongoURL||'mongodb://localhost:27017/'
 console.log(process.env.mongo_URL)
@@ -15,6 +15,24 @@ var Mongoclient=new MongoClient(url);
 app.use(cors())
 
 let URLAPI=process.env.URL_API
+
+
+  const connect=( funtion)=>{
+    Mongoclient.connect().then( async(b)=>{
+
+      if(b)
+      {
+        console.log('kết nối thành công'+url)
+       await funtion(b.db('roomplan'))
+       
+      }
+      })
+  }
+  app.use(bodyParser.json({ type: ["application/json", "application/csp-report"] }));
+  app.use(express.urlencoded({ extended: false }));
+app.listen(port, () => {
+
+})
 wss.on('connection', (ws)=>{
    
     ws.send('welcome')
@@ -43,23 +61,6 @@ wss.on('connection', (ws)=>{
       
       res.status(200).send('ok')
     })
-})
-
-  const connect=( funtion)=>{
-    Mongoclient.connect().then( async(b)=>{
-
-      if(b)
-      {
-        console.log('kết nối thành công'+url)
-       await funtion(b.db('roomplan'))
-       
-      }
-      })
-  }
-  app.use(bodyParser.json({ type: ["application/json", "application/csp-report"] }));
-  app.use(express.urlencoded({ extended: false }));
-app.listen(port, () => {
-
 })
 app.post('/addroom',(req,res)=>{
   connect((db)=>{
