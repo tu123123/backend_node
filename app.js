@@ -35,12 +35,7 @@ server.listen(port, () => {
 })
 if(!checksocket){
  app.post('/updatebooking',(req,res)=>{
-        for( let i of wss.clients){
-          if(i!==ws&& i.readyState=== WebSocket.OPEN)
-          {
-            i.send('welcome')
-          }
-        }
+     
       var query={
         _id:new ObjectId(req.body._id)
       }
