@@ -30,7 +30,7 @@ let URLAPI=process.env.URL_API
   }
   app.use(bodyParser.json({ type: ["application/json", "application/csp-report"] }));
   app.use(express.urlencoded({ extended: false }));
-app.listen(port, () => {
+server.listen(port, () => {
 
 })
 wss.on('connection', (ws)=>{
